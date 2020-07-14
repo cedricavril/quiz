@@ -9,15 +9,15 @@ import java.util.Map;
 
 public class QA implements Manager {
 
-	private int				id,
-							id_category,
-							id_author;
-	private LocalDate 		creationDate;
-	private String 			q;
-	private String 			details;
+	private int					id,
+								id_category,
+								id_author;
+	private LocalDate 			creationDate;
+	private String 				q;
+	private String 				details;
 	private ArrayList<String>	a = new ArrayList<String>();
-	private String 			num_a;
-	static public String	NOM_FICHIER;
+	private String 				num_a;
+	static public String		NOM_FICHIER;
 
 /**
  * 
@@ -43,14 +43,6 @@ public class QA implements Manager {
 		this.id_category = id_category;
 	}
 
-	
-	
-	public QA() {
-	// TODO Auto-generated constructor stub
-}
-
-
-
 	public void saveQA() {
 
 		if (!Manager.loadItemsFromGroup(NOM_FICHIER, this.q).isEmpty()) return;
@@ -66,10 +58,8 @@ public class QA implements Manager {
 		map.put(6, Manager.convStringToArrayListOfStrings("" + this.id_category));
 
 		saveItemsFromGroup(NOM_FICHIER, map, this.id);
-		
 	}
 	
-// bof si id est nécessaire au constructeur, remplacer this.id par un appel à ça dès que ça marche et modifier main en conséquence
 	static int getId(String q) {	
 		return Manager.getIdFromMainFile(NOM_FICHIER, q);
 	}
@@ -123,10 +113,10 @@ public class QA implements Manager {
 
 		return qas;
 	}
-	public boolean delQA() {
-		// et détruire la category id
-		return delItems(NOM_FICHIER, id, 0);
-	}
+//	public boolean delQA() {
+//		// et détruire la category id
+//		return delItems(NOM_FICHIER, id, 0);
+//	}
 
 	@Override
 	public String toString() {

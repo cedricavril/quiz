@@ -15,7 +15,7 @@ public class Author implements Manager {
 	private LocalDate 		registrationDate;
 	public static String	NOM_FICHIER;
 
-// crée ou récupère un author en lui attribuant un id selon ce que contient le fichier
+// create or retrieve an author granting it an id from what's in file content
 	public Author(String lastName, String firstName, LocalDate registrationDate) {
 		FileManager.openOrCreateFile(NOM_FICHIER);
 		this.id = Manager.getIdFromMainFile(NOM_FICHIER, lastName + "\n" + firstName + "\n" + getStringFromDate(registrationDate));
@@ -34,7 +34,7 @@ public class Author implements Manager {
 	public int getId() {
 		return this.id;
 	}
-	
+
 	public boolean saveAuthor() {
 			Map<Integer, ArrayList<String>> items = new HashMap<Integer, ArrayList<String>>();
 			ArrayList<String> sal = new ArrayList<String>();
@@ -57,7 +57,7 @@ public class Author implements Manager {
 		String[] sa = data.get(0).split("\n");
 		ArrayList<String> sal = new ArrayList<String>();
 		for(String item: sa) sal.add(item);
-		
+
 		Author a = new Author(id, sal);
 		return a;
 	}
@@ -76,18 +76,18 @@ public class Author implements Manager {
 		
 		return authors;
 	}
-	
+
 	public static void showAuthors(List<Author> authors) {
 		if(authors.isEmpty()) return;
 		for(Author a : authors) {
 			System.out.println(a);
 		}
 	}
-	
-	public boolean delAuthor() {
-		return delItems(NOM_FICHIER, id, 0);
-	}
-	
+
+//	public boolean delAuthor() {
+//		return delItems(NOM_FICHIER, id, 0);
+//	}
+
 	public static Author createAuthor() {
 		String firstName = Manager.ask("prénom : ");
 		String lastName = Manager.ask("nom : ");

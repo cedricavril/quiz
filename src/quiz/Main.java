@@ -18,8 +18,8 @@ public class Main {
 		Category currentCat;
 	    Author currentAuthor;
 		Scanner myObj = new Scanner(System.in);
-		
-		// commenter ces tests pour garder le contenu des fichiers par défaut
+
+// commenter ces tests pour garder le contenu des fichiers par défaut
 //		testsAuthor();
 //		testsCategory();
 //		testsQA();
@@ -28,13 +28,13 @@ public class Main {
 
 		if (i == 1) {
 		    Manager.clrscr();
-			// menu auteurs
+			// author menu
 			Author.showAuthors(Author.loadAuthors());
 			int askedAuthorId = Integer.parseInt(Manager.ask("Auteur ? 0 pour tous"));
 			currentAuthor = (askedAuthorId == 0) ? null : Author.loadAuthor(askedAuthorId);
 			System.out.println("auteur choisi : " + currentAuthor);
 
-			// menu catégories
+			// category menu
 			System.out.println("Catégorie ? 0 pour toutes ou sélection puis 0 pour conserver la catégorie choisie");
 			ArrayList<Category> cal = Category.showMainCategories("");
 			ArrayList<Integer> parentsIdsToAdd = new ArrayList<Integer>();
@@ -54,8 +54,10 @@ public class Main {
 			    String currentCatName = (nameCat == "") ? "toutes" : currentCat.getName();
 			    System.out.println("catégorie choisie : " + currentCatName);
 			}
-		
-// filtrage selon la catégorie choisie
+
+// TODO filter by author
+// TODO filter by date
+// filtering by chosen category
 			ArrayList<QA> qas = QA.loadQAs();
 
 			int qasCount = qas.size();
@@ -69,8 +71,9 @@ public class Main {
 				}
 			}
 
-			System.out.println("Quiz starts now. " + qas.size() + " questions");
+// TODO ask to go to previous questions for updating them
 			for(int index = 0; index < qas.size(); index++) {
+				System.out.println("Quiz has started. " + qas.size() + " questions");
 				System.out.println(qas.get(index).getQ());
 				System.out.println();
 				for(String a : qas.get(index).getA())
@@ -89,14 +92,14 @@ public class Main {
 			Author a;
 			Category cat = null;
 
-			// menu auteurs
+			// author menu
 		    Manager.clrscr();
 			Author.showAuthors(Author.loadAuthors());
 			int askedAuthorId = Integer.parseInt(Manager.ask("Auteur ? 0 pour tous"));
 			currentAuthor = (askedAuthorId == 0) ? null : Author.loadAuthor(askedAuthorId);
 			System.out.println("auteur choisi : " + currentAuthor);
 
-			// les 2 sont équivalents, Cf. saveItemsFromGroup qui compare avant de créer, mais optimisation oblige.
+			// same deal, Cf. saveItemsFromGroup comparing before creating, but mem optimisation
 			if(askedAuthorId == 0) {
 				a = Author.createAuthor();
 				System.out.println("Auteur créé : " + a);
@@ -106,7 +109,7 @@ public class Main {
 				System.out.println("auteur choisi : " + a);
 			}
 
-			// menu catégories
+			// category menu
 			ArrayList<Category> cal = Category.showMainCategories("");
 			ArrayList<Integer> parentsIdsToAdd = new ArrayList<Integer>();
 			int id = 0;
@@ -126,8 +129,6 @@ public class Main {
 			} while(id < -1 || id > 0 || id == 0 && parentsIdsToAdd.isEmpty());
 
 			
-			//			if (!parentsIdsToAdd.isEmpty()) parentsIdsToAdd.remove(parentsIdsToAdd.size() - 1);
-
 			if (id == 0) {
 				cat = new Category(nameCat);
 				System.out.println("cat choisie : " + cat);
@@ -163,9 +164,7 @@ public class Main {
 
 				System.out.println("QA créée : " + qa);
 				
-				
 				ArrayList<QA> qas = QA.loadQAs();
-
 				System.out.println("les QAs : ");
 				for(QA qaToShow : qas) {
 					System.out.println(qaToShow);
@@ -178,7 +177,6 @@ public class Main {
 			
 		}
 		System.out.println("fin du programme.");
-		//myObj.close();
 	}
 
 	public static int mainMenu() {
@@ -191,7 +189,6 @@ public class Main {
 			System.out.println("3 : Quitter");
 			Scanner myObj = new Scanner(System.in);
 			i = myObj.nextInt();
-//			myObj.close();
 		}
 		return i;
 	}
@@ -213,9 +210,9 @@ public class Main {
 		details = "Détails 1\nretour à la ligne";
 		a = new ArrayList<String>(Arrays.asList("réponse 1", "réponse 2")); 
 		qa = new QA(5, q, details, a, "2", LocalDate.now().minusDays(1), 2, 18);
-		int id = QA.getId(q);
+		System.out.println("id de q : " + QA.getId(q));
 
-		ArrayList<QA> qas = qa.loadQAs();
+		ArrayList<QA> qas = QA.loadQAs();
 
 		System.out.println("les QAs : ");
 		for(QA qaToShow : qas) {
@@ -231,9 +228,6 @@ public class Main {
 	}
 
 	public static void testsCategory() {
-// normalement les ids des parents sont triés. Du coup pour l'instant, impossible d'ajouter des parents, uniquement des children.
-// pour les méthodes comme loadCategory, en faire plutôt des statiques.
-// continuer ici : faire de la sous catégorie et tester le menu dans le main
 		Category cat;
 		ArrayList<Integer> parentsIds = new  ArrayList<Integer>();
 
@@ -269,6 +263,6 @@ public class Main {
 		cat = new Category("nom cat 1.2.4", parentsIds);
 		cat.saveCategory();
 
-//		System.out.println("cat test : " + cat);
+		System.out.println("cat test : " + cat);
 	}	
 }

@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Category implements Manager{
 
 	private int id;
-	// caution : one category at a time handling during the execution
+	// caution : handling one category at a time during the execution
 	static public ArrayList<Integer> 	parentsIds = new ArrayList<Integer>();
 	private String 						name;
 	static public String				NOM_FICHIER;
@@ -28,10 +28,6 @@ public class Category implements Manager{
 		parentsIds.addAll(ids);
 	}
 
-	public void setName(String newName) {
-		this.name = newName;
-	}
-	
 	public String getName() {
 		return this.name;
 	}
@@ -44,17 +40,6 @@ public class Category implements Manager{
 		saveSubItem(NOM_FICHIER, this.getName(), Category.parentsIds, this.id);
 	}
 
-	public Category loadCategory(int id) {
-		// we assume id is valid
-		this.name = Manager.loadItemFromBunch(NOM_FICHIER, id);
-		if (this.name != null) {
-			if (parentsIds != null) parentsIds.clear();
-			parentsIds = getIdsFromBunch(NOM_FICHIER, id);
-			return new Category(this.name);
-		}
-		else return null;
-	}
-
 	public static ArrayList<Category> loadCategories(String catName) {
 		ArrayList<Category> res = new ArrayList<Category>();
 		Category c = new Category(catName);
@@ -65,7 +50,6 @@ public class Category implements Manager{
 		return res;
 	}
 	
-	//	public ArrayList<Category> loadMainCategories(int id, Category cat) {
 	public static ArrayList<Category> showMainCategories(String catName) {
 		ArrayList<Category> cal = loadCategories(catName);
 		System.out.println("catégories principales : ");
@@ -85,7 +69,6 @@ public class Category implements Manager{
 				if (c.parentsIds.get(c.parentsIds.size() - 1) == id) System.out.println(c.getId() + " : " + c.getName());
 		}
 		Scanner myObj = new Scanner(System.in);
-		//myObj.close();
 		return myObj.nextInt();
 	}
 
@@ -95,10 +78,8 @@ public class Category implements Manager{
 		return new Category(catName, parentsIds);
 	}
 	
-	
 	@Override
 	public String toString() {
 		return "id : " + id + ". Ids parents : " + parentsIds + " nom de la category : " + name + "\n";
 	}
-
 }

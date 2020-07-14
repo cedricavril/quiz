@@ -18,130 +18,65 @@ import java.util.regex.*;
 // TODO : virer les level. Une branche max.
 public interface Manager extends FileManager {
 
-		static int getIdFromMainFile(String nomFichier, String q) {
-			BufferedReader 					reader;
-			String 							currentLine;
-			boolean 						sameFirstItem;
-			int 							i = 0;
-			String[] 						sa = q.split("\n");
-			int 							id, maxId = 0;
-			
-			try {
-				reader = new BufferedReader(new FileReader(nomFichier));
-				mainLoop: while(((currentLine = reader.readLine()) != null)) {
-					Pattern matchingId = Pattern.compile("^-(\\d+)(-\\d+)*( .+)");
-					Matcher m = matchingId.matcher(currentLine);
-
-					if(m.matches()){
-						String lineCompared = m.group(3);
-						id = Integer.parseInt(m.group(1));
-						if (maxId < id) maxId = id;
-						do {
-							sameFirstItem = lineCompared.equals(" " + sa[i]);
-							if (!sameFirstItem) continue mainLoop;
-							i++;
-						}
-						while((( lineCompared = reader.readLine()) != null) && (i < sa.length) && sameFirstItem);
-						if (sameFirstItem && (i == sa.length)) {
-							reader.close();
-							return id;
-						}
-						i = 0;
-					};
-				}
-				reader.close();
-			} catch (IOException e) {
-				System.out.println("Erreur d'entrée/sortie ou fichier non trouvé pour loadItemsFromGroup.");
-				e.printStackTrace();
-			}
-
-			return ++maxId;
-		}
-			
-
-		static ArrayList<String> convStringToArrayListOfStrings(String s) {
-			ArrayList<String> res = new ArrayList<String>();
-			res.add(s);
-			return res;
-		}
-
-		static String convArrayListOfStringsToString(ArrayList<String> sal) {
-			String res = "";
-			for(String s : sal ) {
-				res += s + "\n";
-			}
-			res = res.substring(0, res.length() - 1);
-			return res;
-		}
-
-// level <= 1
-
-// TODO le delete devra décrémenter tous les ids des children. Pareil pour les create ou add qui devront incrémenter.
-	default boolean delItems(String nomFichier, int id, int id2, String...propagationFiles) {
-
-		File inputFile = new File(nomFichier);
-		File tempFile = new File("tempFile.txt");
-		String itemHeadline = "" + id;
-		String currentLine;
-		String nextItemStarts = "-";
-
-		if (id2 == 0) {
-			try {
-				BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-				BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-				while((currentLine = reader.readLine()) != null) {
-				    if(currentLine.equals(itemHeadline)) {
-					    while((currentLine = reader.readLine()) != null && currentLine.startsWith(nextItemStarts)) {
-					    }
-				    }
-				    writer.write(currentLine + System.getProperty("line.separator"));
-				}
-				writer.close();
-				reader.close();
-				return tempFile.renameTo(inputFile);
-			} catch (IOException e) {
-				System.out.println("Erreur d'entrée/sortie ou fichier " + nomFichier + "non trouvé.");
-			}
-		}
-		return true;
-	}
-
-// à virer si ne sert pas
-	default Map<String, ArrayList<String>> loadItems(String nomFichier) {
-
-		File 							inputFile = new File(nomFichier);
-		String 							currentLine,
-										id = "",
-										subItemStarting = "-";
-		ArrayList<String> 				subItems = new ArrayList<>();
-		Map<String, ArrayList<String>> 	resultItems = new HashMap<>();
+	static int getIdFromMainFile(String nomFichier, String q) {
 		BufferedReader 					reader;
-
+		String 							currentLine;
+		boolean 						sameFirstItem;
+		int 							i = 0;
+		String[] 						sa = q.split("\n");
+		int 							id, maxId = 0;
+		
 		try {
-			reader = new BufferedReader(new FileReader(inputFile));
-			do {
-			    while((currentLine = reader.readLine()) != null && currentLine.startsWith(subItemStarting))
-	    			subItems.add(currentLine.substring(currentLine.indexOf(' ') + 1));
-			    	if (id != "") {
-						resultItems.put(id, (ArrayList<String>)subItems.clone());
-						subItems.clear();
-			    	}
-			    	id = currentLine;
-				} while(currentLine != null);
+			reader = new BufferedReader(new FileReader(nomFichier));
+			mainLoop: while(((currentLine = reader.readLine()) != null)) {
+				Pattern matchingId = Pattern.compile("^-(\\d+)(-\\d+)*( .+)");
+				Matcher m = matchingId.matcher(currentLine);
 
-			} catch (IOException e) {
-			System.out.println("Erreur d'entrée/sortie ou fichier " + nomFichier + "non trouvé.");
+				if(m.matches()){
+					String lineCompared = m.group(3);
+					id = Integer.parseInt(m.group(1));
+					if (maxId < id) maxId = id;
+					do {
+						sameFirstItem = lineCompared.equals(" " + sa[i]);
+						if (!sameFirstItem) continue mainLoop;
+						i++;
+					}
+					while((( lineCompared = reader.readLine()) != null) && (i < sa.length) && sameFirstItem);
+					if (sameFirstItem && (i == sa.length)) {
+						reader.close();
+						return id;
+					}
+					i = 0;
+				};
+			}
+			reader.close();
+		} catch (IOException e) {
+			System.out.println("Erreur d'entrée/sortie ou fichier non trouvé pour loadItemsFromGroup.");
+			e.printStackTrace();
 		}
 
+		return ++maxId;
+	}
 		
-		return resultItems;
+
+	static ArrayList<String> convStringToArrayListOfStrings(String s) {
+		ArrayList<String> res = new ArrayList<String>();
+		res.add(s);
+		return res;
 	}
 
+	static String convArrayListOfStringsToString(ArrayList<String> sal) {
+		String res = "";
+		for(String s : sal ) {
+			res += s + "\n";
+		}
+		res = res.substring(0, res.length() - 1);
+		return res;
+	}
 
 	default ArrayList<String> loadItemsNameList(String nomFichier) {
 		File 							inputFile = new File(nomFichier);
 		String 							currentLine,
-										id = "",
 										itemStarting = "-";
 		ArrayList<String> 				items = new ArrayList<>();
 		BufferedReader 					reader;
@@ -223,41 +158,6 @@ public interface Manager extends FileManager {
 		return null;
 	}
 
-	default ArrayList<Integer> getFirstChildrenIdsFromId(String nomFichier, int id) {
-
-		// we assume nomFichier exists
-		File 				inputFile = new File(nomFichier);
-		String 				currentLine, 
-							resString;
-		ArrayList<Integer>	res = new ArrayList<>();
-		BufferedReader 		reader;
-
-		try {
-			reader = new BufferedReader(new FileReader(inputFile));
-
-			while((currentLine = reader.readLine()) != null) {
-				Pattern pToFind = Pattern.compile("^((-\\d+)+)-" + id + " .+");
-				Matcher mToFind = pToFind.matcher(currentLine);
-
-				if (mToFind.matches() && mToFind.group(1) != null) {
-					reader.close();
-					resString = mToFind.group(1);
-					for(String s : resString.split("-")) {
-						if (s.equals("")) continue;
-						res.add(Integer.parseInt(s));
-					}
-					return res;
-				}
-			}
-		} catch (IOException e) {
-			System.out.println("Erreur 3 - d'entrée/sortie ou fichier non trouvé.");
-			e.printStackTrace();
-		}
-
-		return null;
-		
-	}
-		
 	static String loadItemFromBunch(String nomFichier, int id) {
 		// we assume nomFichier exists
 		File 			inputFile = new File(nomFichier);
@@ -448,6 +348,7 @@ public interface Manager extends FileManager {
 		}
 		return item;
 	}
+
 	public static Map<Integer, String> loadFirstContents(String nomFichier) {
 
 		BufferedReader 					reader;
@@ -485,7 +386,6 @@ public interface Manager extends FileManager {
 							}
 						}
 						if (currentLine.startsWith("-")) break;
-						//linesToPut += currentLine.trim();
 						linesToPut += currentLine.trim() + "\n";
 					}
 					item.put(id, linesToPut);
@@ -502,7 +402,7 @@ public interface Manager extends FileManager {
 		return item;
 	}
 
-	// upsert - peut être utiliser ça aussi pour author
+	// upsert
 	default boolean saveItemsFromGroup(String nomFichier, Map<Integer, ArrayList<String>> items, Integer id) {
 		FileManager.openOrCreateFile(nomFichier);
 
@@ -622,9 +522,7 @@ public interface Manager extends FileManager {
 			e.printStackTrace();
 		}
 
-		
 		return tempFile.renameTo(inputFile);
-		
 	}
 
 	default String getStringFromDate(LocalDate lt) {
@@ -637,7 +535,7 @@ public interface Manager extends FileManager {
 		return LocalDate.parse(d, df);
 	}
 
-// lambda pourrait être possible pour fusionner les 2 ask avec ask(s -> s.equals("")) et ask(s -> !s.equals(""))
+// might be possible to use of lambda to merge the 2 ask methods into one with ask(s -> s.equals("")) and ask(s -> !s.equals(""))
 	public static String ask(String q) {
 		Scanner myObj = new Scanner(System.in);
 		System.out.println(q);
@@ -646,7 +544,6 @@ public interface Manager extends FileManager {
 			s = myObj.nextLine(); 
 			if (s.equals("")) System.out.println("chaine vide");
 		}
-		//myObj.close();
 		return s;
 	}
 
@@ -660,7 +557,6 @@ public interface Manager extends FileManager {
 			if (s.equals("")) System.out.println("fin de saisie");
 			else sal.add(s);
 		} while(!s.equals(""));
-		//myObj.close();
 		return sal;
 	}
 	
