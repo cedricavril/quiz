@@ -48,8 +48,11 @@ public class QA implements Manager {
 		if (!Manager.loadItemsFromGroup(NOM_FICHIER, this.q).isEmpty()) return;
 
 		Map<Integer, ArrayList<String>> map = new HashMap<>();
-		map.put(0, Manager.convStringToArrayListOfStrings(this.q));
 
+		this.q = "***\n" + this.q + "\n***";
+		this.details = "***\n" + this.details + "\n***";
+
+		map.put(0, Manager.convStringToArrayListOfStrings(this.q));
 		map.put(1, Manager.convStringToArrayListOfStrings(this.details));
 		map.put(2, this.a);
 		map.put(3, Manager.convStringToArrayListOfStrings(this.num_a));
@@ -59,31 +62,31 @@ public class QA implements Manager {
 
 		saveItemsFromGroup(NOM_FICHIER, map, this.id);
 	}
-	
+
 	static int getId(String q) {	
 		return Manager.getIdFromMainFile(NOM_FICHIER, q);
 	}
-	
+
 	public int getIdCategory() {
 		return id_category;
 	}
-	
+
 	public int getIdAuthor() {
 		return id_author;
 	}
-	
+
 	public String getQ() {
 		return q;
 	}
-	
+
 	public String getNum_a() {
 		return num_a;
 	}
-	
+
 	public ArrayList<String> getA() {
 		return a;
 	}
-	
+
 	public void showAs() {
 		for(String s : a) {
 			System.out.println(s);

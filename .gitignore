@@ -2,10 +2,12 @@ assessment test.txt
 authors
 categories
 qas
-chapter 1 - java building blocks.txt
 src/authors
 src/categories
 src/qas
 src/chapter 1 - java building blocks.txt
+src/chapter 2 - Operators and Statements.txt
+src/chapter 3 - Core Java APIs.txt
+src/chapter 4 - Methods and Encapsulation.txt
 src/exosPersosPourCertifRevision
 src/exosPersosPourCertifRevision2

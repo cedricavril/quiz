@@ -4,7 +4,6 @@ import java.time.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -128,7 +127,6 @@ public class Main {
 				else if (id == -1) oldCat = nameCat;
 			} while(id < -1 || id > 0 || id == 0 && parentsIdsToAdd.isEmpty());
 
-			
 			if (id == 0) {
 				cat = new Category(nameCat);
 				System.out.println("cat choisie : " + cat);

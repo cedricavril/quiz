@@ -9,16 +9,10 @@ java quizz/Main
 
 Feel free to work on them.
 Menus are in french.
-Some functionalities are missing, whether they're already listed in the menus or not. Feel free to add them.
+Some functionalities are missing, whether they're already listed in the menus or not. Feel free to add them. Filtering authors and category has to be coded too.
 you also can edit the code as long as you check it's still working.
 
 Entities ids match some menu options. 
-
-So far, some rules have to be followed when filling the entity from the menu to save them into the files. Feel free to update the code for each property to convert the data into a valid entity to save into a file, after any keyboard entry.
-
-Rules are :
-
-text fields need at least 2 non empty lines.
 
 ## QA :
  - details is a text field.
