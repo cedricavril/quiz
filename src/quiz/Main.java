@@ -15,7 +15,8 @@ public class Main {
 		Author.NOM_FICHIER		= "authors";
 
 		Category currentCat;
-	    Author currentAuthor;
+		String currentCatName = "";
+		Author currentAuthor;
 		Scanner myObj = new Scanner(System.in);
 
 // commenter ces tests pour garder le contenu des fichiers par défaut
@@ -40,6 +41,8 @@ public class Main {
 			int id = 1, idCategory = 0;
 			String nameCat = "";
 
+			// TODO filter by author but here
+			// TODO filter by date
 			for(id = myObj.nextInt(); id > 0; id = Category.menuSubCategories(cal, id)) {
 				System.out.println("Catégorie ? 0 pour conserver la catégorie choisie");
 				nameCat = Manager.loadItemFromBunch("categories", id);
@@ -50,19 +53,21 @@ public class Main {
 
 			if (id == 0) {
 			    currentCat = new Category(nameCat, parentsIdsToAdd);
-			    String currentCatName = (nameCat == "") ? "toutes" : currentCat.getName();
+			    currentCatName = (nameCat == "") ? "toutes" : currentCat.getName();
 			    System.out.println("catégorie choisie : " + currentCatName);
 			}
 
-// TODO filter by author
-// TODO filter by date
-// filtering by chosen category
+// filtering by chosen category and chosen author
 			ArrayList<QA> qas = QA.loadQAs();
 
 			int qasCount = qas.size();
 			if (idCategory != 0) {
 				for(int index = 0; index < qasCount; index++) {
-					if (qas.get(index).getIdCategory() != idCategory) {
+					if (!currentCatName.equals("toutes") & qas.get(index).getIdCategory() != idCategory) {
+						qas.remove(index);
+						index--;
+						qasCount--;
+					} else if (currentAuthor != null & qas.get(index).getIdAuthor() != askedAuthorId) {
 						qas.remove(index);
 						index--;
 						qasCount--;
@@ -94,7 +99,7 @@ public class Main {
 			// author menu
 		    Manager.clrscr();
 			Author.showAuthors(Author.loadAuthors());
-			int askedAuthorId = Integer.parseInt(Manager.ask("Auteur ? 0 pour tous"));
+			int askedAuthorId = Integer.parseInt(Manager.ask("Auteur ? 0 pour nouveau"));
 			currentAuthor = (askedAuthorId == 0) ? null : Author.loadAuthor(askedAuthorId);
 			System.out.println("auteur choisi : " + currentAuthor);
 
